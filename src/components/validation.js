@@ -12,6 +12,9 @@ function hideInputError(formElement, inputElement, { inputErrorClass, errorClass
   inputElement.classList.remove(inputErrorClass);
   errorElement.classList.remove(errorClass);
   errorElement.textContent = '';
+
+  // Сброс пользовательского сообщения об ошибке
+  inputElement.setCustomValidity("");
 }
 
 // Функция проверки валидности поля

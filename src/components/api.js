@@ -6,18 +6,20 @@ const config = {
   }
 };
 
+// Выносим проверку ответа от сервер в отдельную функцию
+function getResponseData(res) {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+  return res.json();
+}
+
 // Функция для получения информации о пользователе
 export const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  })
-  .catch(err => console.log(err));
+  .then(getResponseData);
 };
 
 // Функция для получения списка карточек
@@ -25,12 +27,7 @@ export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };
 
 // Функция для обновления информации о пользователе
@@ -43,12 +40,7 @@ export const updateUserInfo = (name, about) => {
       about: about
     })
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };
 
 // Функция для добавления новой карточки на сервер
@@ -61,12 +53,7 @@ export const addNewCard = (name, link) => {
       link: link
     })
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };
 
 // Функция для постановки лайка (PUT-запрос)
@@ -75,12 +62,7 @@ export const likeCard = (cardId) => {
     method: 'PUT',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };
 
 // Функция для снятия лайка (DELETE-запрос)
@@ -89,36 +71,17 @@ export const dislikeCard = (cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };
 
 // Удаление карточки
-
 export const deleteCardFromServer = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };
-
-export function deleteCard(cardElement, cardId) {
-  deleteCardFromServer(cardId)
-    .then(() => {
-      cardElement.remove();
-    })
-    .catch(err => console.log(`Ошибка при удалении карточки: ${err}`));
-}
 
 // Функция обновления аватара
 export const updateAvatar = (avatarUrl) => {
@@ -129,10 +92,5 @@ export const updateAvatar = (avatarUrl) => {
       avatar: avatarUrl
     })
   })
-  .then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  .then(getResponseData);
 };

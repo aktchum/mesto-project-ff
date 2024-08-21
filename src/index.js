@@ -1,6 +1,6 @@
 import './index.css';
 // import { initialCards } from './components/initialCards.js';
-import { createCard, toggleLikeButton } from './components/cards.js';
+import { createCard, toggleLikeButton, deleteCard } from './components/cards.js';
 import { openModal, closeModal } from './components/modal.js';
 
 import { enableValidation, clearValidation } from './components/validation.js';
@@ -9,7 +9,6 @@ import {
   getInitialCards,
   updateUserInfo,
   addNewCard,
-  deleteCard,
   updateAvatar,
  } from './components/api.js';
 
@@ -33,19 +32,26 @@ const allPopups = document.querySelectorAll('.popup');
 const profileForm = document.forms['edit-profile'];
 const nameInput = profileForm.querySelector('.popup__input_type_name');
 const jobInput = profileForm.querySelector('.popup__input_type_description');
-const submitButton = profileForm.querySelector('.popup__button');
+const profileSubmitButton = profileForm.querySelector('.popup__button');
 
 const newPlaceForm = document.forms['new-place'];
 const newPlaceInputName = newPlaceForm.elements['place-name'];
 const newPlaceInputLink = newPlaceForm.elements.link;
+const newPlaceSubmitButton = newPlaceForm.querySelector('.popup__button');
 
 const avatarEditForm = document.forms['avatar-edit']; // Форма для редактирования аватара
 const avatarUrlInput = avatarEditForm.elements['avatar-link']; // Поле ввода URL аватара
+const avatarSubmitButton = avatarEditForm.querySelector('.popup__button');
 
 // получение значений полей ввода формы
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const avatarImage = document.querySelector('.profile__image');
+
+const buttonText = {
+  saving: 'Сохранение...',
+  save: 'Сохранить',
+};
 
 //Валидация форм
 const objValidation = {
@@ -129,6 +135,11 @@ allPopups.forEach(function(popup) {
   });
 });
 
+// функция изменения текста кнопки
+function setSubmitButtonText(button, text) {
+  button.textContent = text;
+}
+
 // редактирование информации через попап редактирования
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -136,7 +147,7 @@ function handleProfileFormSubmit(evt) {
   const name = nameInput.value;
   const about = jobInput.value;
 
-  submitButton.textContent = 'Сохранение...'; // Изменяем текст кнопки
+  setSubmitButtonText(profileSubmitButton, buttonText.saving); // Изменяем текст кнопки
 
   // Отправляем обновленные данные на сервер
   updateUserInfo(name, about)
@@ -150,7 +161,7 @@ function handleProfileFormSubmit(evt) {
       console.log(`Ошибка при обновлении профиля: ${err}`);
     })
     .finally(() => {
-      submitButton.textContent = 'Сохранить';
+      setSubmitButtonText(profileSubmitButton, buttonText.save);
     });
 }
 profileForm.addEventListener('submit', handleProfileFormSubmit); 
@@ -164,7 +175,7 @@ function handlePlaceSubmit(evt) {
     link: newPlaceInputLink.value,
   };
 
-  submitButton.textContent = 'Сохранение...'; // Изменяем текст кнопки
+  setSubmitButtonText(newPlaceSubmitButton, buttonText.saving); // Изменяем текст кнопки
 
   // Отправляем новую карточку на сервер
   addNewCard(newCard.name, newCard.link)
@@ -178,7 +189,7 @@ function handlePlaceSubmit(evt) {
       console.log(`Ошибка добавления новой карточки: ${err}`);
     })
     .finally(() => {
-      submitButton.textContent = 'Сохранить'; // Возвращаем исходный текст кнопки
+      setSubmitButtonText(newPlaceSubmitButton, buttonText.save); // Возвращаем исходный текст кнопки
     });
 }
 newPlaceForm.addEventListener('submit', handlePlaceSubmit); 
@@ -202,7 +213,7 @@ avatarEditForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
   
   const avatarUrl = avatarUrlInput.value;
-  submitButton.textContent = 'Сохранение...';
+  setSubmitButtonText(avatarSubmitButton, buttonText.saving);
 
   updateAvatar(avatarUrl)
     .then((updatedUserInfo) => {
@@ -214,6 +225,6 @@ avatarEditForm.addEventListener('submit', function (evt) {
       console.log(`Ошибка при обновлении аватара: ${err}`);
     })
     .finally(() => {
-      submitButton.textContent = 'Сохранить';
+      setSubmitButtonText(avatarSubmitButton, buttonText.save);
     });
 });

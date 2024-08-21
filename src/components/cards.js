@@ -1,4 +1,4 @@
-import { likeCard, dislikeCard } from './api.js';
+import { likeCard, dislikeCard, deleteCardFromServer } from './api.js';
 
 const userTemplate = document.querySelector('#card-template').content;
 
@@ -63,3 +63,11 @@ export function createCard({ cardData, deleteCardCallback, imageClickCallback, u
 export function toggleLikeButton(button) {
   button.classList.toggle('card__like-button_is-active');
 };
+
+export function deleteCard(cardElement, cardId) {
+  deleteCardFromServer(cardId)
+    .then(() => {
+      cardElement.remove();
+    })
+    .catch(err => console.log(`Ошибка при удалении карточки: ${err}`));
+}
