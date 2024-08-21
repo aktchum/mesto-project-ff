@@ -25,3 +25,11 @@
     line-height: 17px;
   }
 }
+
+.popup__button.popup__button_disabled {
+  background: transparent;
+  color: #000000;
+  opacity: 20%;
+  border: 1px solid rgba(0, 0, 0, 2);
+  border-radius: 2px;
+}

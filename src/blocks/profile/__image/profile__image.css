@@ -1,12 +1,30 @@
 .profile__image {
+  position: relative;
   width: 120px;
   height: 120px;
+  margin: 0 29px 0 0;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  background-size: cover;
   background-position: center;
-  margin: 0 29px 0 0;
+  background-size: cover;
+  transition: 0.3s ease;
+}
+
+.overlay-icon {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: translate(47px,-73px);
+  pointer-events: none;
+}
+
+.profile__image-container:hover .profile__image {
+  filter: brightness(0.2);
+}
+
+.profile__image-container:hover .overlay-icon {
+  opacity: 1;
 }
 
 @media screen and (max-width: 740px) {
